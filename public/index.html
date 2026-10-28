@@ -248,6 +248,31 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   .studio__based i{margin:0 9px 0 13px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* Opening hero only: red plate, model, and wordmark remain still. */
+@keyframes guraisu-quiet{
+  from{opacity:0;transform:translate3d(0,7px,0)}
+  to{opacity:1;transform:none}
+}
+@keyframes guraisu-type{
+  from{clip-path:inset(0 0 100% 0);transform:translate3d(0,10px,0)}
+  to{clip-path:inset(0 0 0 0);transform:none}
+}
+@keyframes guraisu-fade{
+  from{opacity:0}
+  to{opacity:1}
+}
+@media (prefers-reduced-motion:no-preference){
+  .hero__top .brand{animation:guraisu-quiet .52s cubic-bezier(.22,1,.36,1) .05s backwards}
+  .hero__top .nav{animation:guraisu-quiet .52s cubic-bezier(.22,1,.36,1) .15s backwards}
+  .hero__top .menu-btn{animation:guraisu-quiet .52s cubic-bezier(.22,1,.36,1) .15s backwards}
+  .hero__title .l:nth-child(1){animation:guraisu-type .68s cubic-bezier(.19,1,.22,1) .24s backwards}
+  .hero__title .l:nth-child(2){animation:guraisu-type .68s cubic-bezier(.19,1,.22,1) .36s backwards}
+  .hero__title .l:nth-child(3){animation:guraisu-type .68s cubic-bezier(.19,1,.22,1) .48s backwards}
+  .hero__intro .copy{animation:guraisu-quiet .58s cubic-bezier(.22,1,.36,1) .73s backwards}
+  .hero__intro .link-arrow{animation:guraisu-quiet .54s cubic-bezier(.22,1,.36,1) .91s backwards}
+  .hero__nav{animation:guraisu-quiet .54s cubic-bezier(.22,1,.36,1) .96s backwards}
+  .comp__pill{animation:guraisu-fade .76s cubic-bezier(.22,1,.36,1) .78s backwards}
+}
 </style>
 </head>
 <body>
