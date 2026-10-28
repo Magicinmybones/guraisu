@@ -6,6 +6,14 @@
 <title>Guraisu Fashion Studio</title>
 <meta name="description" content="Guraisu Fashion Studio — advanced concepts in design. Creative energy you can wear.">
 <meta name="theme-color" content="#040000">
+<link rel="preload" as="image" href="asset/image-07bf61f0dbd78cb9.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="asset/image-9f82caea736017f1.webp" fetchpriority="high">
+<script>
+if(matchMedia('(prefers-reduced-motion: no-preference)').matches){
+  document.documentElement.classList.add('guraisu-pending');
+  window.guraisuFallback=setTimeout(function(){document.documentElement.classList.remove('guraisu-pending')},4500);
+}
+</script>
 <style>
 /* =========================================================================
    GURAISU — single-file build
@@ -126,7 +134,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   /* each section = exactly one viewport (grows only if the content physically cannot fit) */
   .hero{position:relative;overflow:hidden;isolation:isolate;background:var(--void);padding-top:calc(var(--pad) * .8);
     height:100svh;min-height:min-content;display:flex;flex-direction:column;justify-content:space-between;padding-bottom:clamp(14px,3svh,32px)}
-  .hero__plate{position:absolute;left:0;top:0;width:100%;height:min(100%,max(150vw,640px));background:var(--plate) 58% 0/cover no-repeat;z-index:-2;
+  .hero__plate{position:absolute;left:0;top:0;width:100%;height:min(100%,max(150vw,640px));background:#7a0d08 var(--plate) 58% 0/cover no-repeat;z-index:-2;
     -webkit-mask:linear-gradient(#000 62%,transparent 100%);mask:linear-gradient(#000 62%,transparent 100%)}
   .hero__top{position:relative;z-index:8;display:flex;justify-content:space-between;align-items:center;padding:0 var(--pad)}
   .hero__top .nav{display:none}
@@ -248,30 +256,25 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
   .studio__based i{margin:0 9px 0 13px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
-/* Opening hero only: red plate, model, and wordmark remain still. */
-@keyframes guraisu-quiet{
-  from{opacity:0;transform:translate3d(0,7px,0)}
+/* Play once after the plate and masked foreground model have decoded. */
+@keyframes guraisu-soft{
+  from{opacity:0;transform:translate3d(0,6px,0)}
   to{opacity:1;transform:none}
-}
-@keyframes guraisu-type{
-  from{clip-path:inset(0 0 100% 0);transform:translate3d(0,10px,0)}
-  to{clip-path:inset(0 0 0 0);transform:none}
 }
 @keyframes guraisu-fade{
   from{opacity:0}
   to{opacity:1}
 }
 @media (prefers-reduced-motion:no-preference){
-  .hero__top .brand{animation:guraisu-quiet .52s cubic-bezier(.22,1,.36,1) .05s backwards}
-  .hero__top .nav{animation:guraisu-quiet .52s cubic-bezier(.22,1,.36,1) .15s backwards}
-  .hero__top .menu-btn{animation:guraisu-quiet .52s cubic-bezier(.22,1,.36,1) .15s backwards}
-  .hero__title .l:nth-child(1){animation:guraisu-type .68s cubic-bezier(.19,1,.22,1) .24s backwards}
-  .hero__title .l:nth-child(2){animation:guraisu-type .68s cubic-bezier(.19,1,.22,1) .36s backwards}
-  .hero__title .l:nth-child(3){animation:guraisu-type .68s cubic-bezier(.19,1,.22,1) .48s backwards}
-  .hero__intro .copy{animation:guraisu-quiet .58s cubic-bezier(.22,1,.36,1) .73s backwards}
-  .hero__intro .link-arrow{animation:guraisu-quiet .54s cubic-bezier(.22,1,.36,1) .91s backwards}
-  .hero__nav{animation:guraisu-quiet .54s cubic-bezier(.22,1,.36,1) .96s backwards}
-  .comp__pill{animation:guraisu-fade .76s cubic-bezier(.22,1,.36,1) .78s backwards}
+  .guraisu-pending .comp,.guraisu-pending .hero__title,
+  .guraisu-pending .hero__intro .copy,.guraisu-pending .hero__intro .link-arrow,
+  .guraisu-pending .hero__nav,.guraisu-pending .comp__pill{opacity:0}
+  .guraisu-entering .comp{animation:guraisu-fade .72s cubic-bezier(.22,1,.36,1) .04s backwards}
+  .guraisu-entering .hero__title{animation:guraisu-soft .68s cubic-bezier(.22,1,.36,1) .26s backwards}
+  .guraisu-entering .hero__intro .copy{animation:guraisu-soft .55s cubic-bezier(.22,1,.36,1) .58s backwards}
+  .guraisu-entering .hero__intro .link-arrow{animation:guraisu-soft .5s cubic-bezier(.22,1,.36,1) .74s backwards}
+  .guraisu-entering .hero__nav{animation:guraisu-soft .5s cubic-bezier(.22,1,.36,1) .81s backwards}
+  .guraisu-entering .comp__pill{animation:guraisu-fade .6s cubic-bezier(.22,1,.36,1) .68s backwards}
 }
 </style>
 </head>
@@ -369,6 +372,19 @@ M399.1 1027.2a102.5 110 0 1 0 205.0 0a102.5 110 0 1 0 -205.0 0Z"/>
       document.querySelector('.frame').style.setProperty('--k',w/1145);
       if(s){document.querySelector('.hero').style.setProperty('--k',Math.min(w/1145,h/838));document.querySelector('.studio').style.setProperty('--k',Math.min(w/1145,h/536))}};
     r();addEventListener('resize',r);
+  }
+  if(d.classList.contains('guraisu-pending')){
+    Promise.all(['asset/image-07bf61f0dbd78cb9.jpg','asset/image-9f82caea736017f1.webp'].map(function(src){
+      var image=new Image();image.src=src;
+      return image.decode ? image.decode().catch(function(){}) : new Promise(function(resolve){image.onload=resolve;image.onerror=resolve});
+    })).then(function(){
+      if(!d.classList.contains('guraisu-pending'))return;
+      clearTimeout(window.guraisuFallback);
+      requestAnimationFrame(function(){
+        d.classList.remove('guraisu-pending');d.classList.add('guraisu-entering');
+        setTimeout(function(){d.classList.remove('guraisu-entering')},1600);
+      });
+    });
   }
 })();
 </script>
